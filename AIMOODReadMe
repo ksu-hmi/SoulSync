@@ -47,4 +47,4 @@ It should open in your browser.
 - FastAPI backend processes the text using NLTK's SentimentIntensityAnalyzer.
 - Mood is determined as Positive 😃, Negative 😢, or Neutral 😐.
 - Result is displayed with an emoji in the UI.
-
+more to follow
