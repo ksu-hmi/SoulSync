@@ -1,0 +1,76 @@
+import json
+from datetime import datetime
+import matplotlib.pyplot as plt
+import random
+
+# ---------------- MOOD TRACKING ---------------- #
+
+MOOD_FILE = "mood_data.json"
+
+def log_mood():
+    mood = input("How are you feeling today? (happy, sad, anxious, calm, angry): ").strip().lower()
+    notes = input("Any notes about today? (optional): ").strip()
+    entry = {
+        "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "mood": mood,
+        "notes": notes
+    }
+    try:
+        with open(MOOD_FILE, "r") as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        data = []
+
+    data.append(entry)
+    with open(MOOD_FILE, "w") as file:
+        json.dump(data, file, indent=2)
+
+    print("✅ Mood logged successfully.")
+    return mood
+
+def visualize_mood_trends():
+    try:
+        with open(MOOD_FILE, "r") as file:
+            data = json.load(file)
+        dates = [entry["date"] for entry in data]
+        moods = [entry["mood"] for entry in data]
+        mood_map = {"happy": 5, "calm": 4, "neutral": 3, "anxious": 2, "sad": 1, "angry": 0}
+        mood_values = [mood_map.get(mood, 3) for mood in moods]
+
+        plt.plot(dates, mood_values, marker='o')
+        plt.title("Mood Trend Over Time")
+        plt.xlabel("Date")
+        plt.ylabel("Mood Level")
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.show()
+    except FileNotFoundError:
+        print("⚠ No mood data found.")
+
+# ---------------- MINDFULNESS LIBRARY ---------------- #
+
+mindfulness_exercises = {
+    "happy": ["Reflect on a goal you're proud of", "Do a random act of kindness"],
+    "sad": ["Try deep breathing for 5 minutes", "Write down 3 good things in your life"],
+    "anxious": ["Do a grounding exercise: 5-4-3-2-1", "Listen to calming music"],
+    "calm": ["Practice gratitude journaling", "Stretch gently for 10 minutes"],
+    "angry": ["Do a body scan meditation", "Go for a brisk walk outside"]
+}
+
+def recommend_exercise(mood):
+    exercises = mindfulness_exercises.get(mood, ["Take a break and breathe deeply."])
+    print("\n🧘 Try this mindfulness exercise:")
+    print(f"- {random.choice(exercises)}\n")
+
+# ---------------- RUNNING THE APP ---------------- #
+
+def run_soulsync():
+    print("\n🌟 Welcome to SoulSync: Your Mental Health Companion 🌟\n")
+    mood = log_mood()
+    recommend_exercise(mood)
+    view_trends = input("Would you like to view your mood trends? (yes/no): ").strip().lower()
+    if view_trends == "yes":
+        visualize_mood_trends()
+
+if __name__ == "__main__":
+    run_soulsync()
