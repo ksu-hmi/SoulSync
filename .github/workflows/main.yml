@@ -24,4 +24,4 @@ jobs:
 
     - name: Run Soulsync code
       run: |
-        soulsync_phase1.py
+        soulsyncphase1.py
