@@ -55,4 +55,4 @@ This project not only addresses a critical need but also serves as a valuable le
 ### Installation:
 1. Clone the repository:
    ```bash
-   git clone https://github.com/mjefferma/SoulSync.git
+   git clone https://github.com/ksu-hmi/SoulSync.git
