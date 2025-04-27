@@ -11,7 +11,7 @@ def clear_screen():
         os.system("cls")
     else:
         os.system("clear")
-5
+
 # ---- Function to get a time-based greeting ----
 def get_greeting():
     hour = datetime.now().hour
@@ -48,7 +48,7 @@ def run_phase1(mood_input):
     mood = mood_input
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     entry = {"timestamp": timestamp, "mood": mood}
-    
+
     if os.path.exists("mood_history.json"):
         with open("mood_history.json", "r") as file:
             data = json.load(file)
@@ -160,7 +160,6 @@ if __name__ == "__main__":
     try:
         while True:
             clear_screen()
-            display_logo()
             greeting = get_greeting()
             print(f"\n{greeting}, welcome to SoulSync!")
             print("==============================")
@@ -207,3 +206,4 @@ if __name__ == "__main__":
                 input("\nPress Enter to continue...")
     except (EOFError, OSError):
         print("\nInteractive input not available. Program exiting.")
+
