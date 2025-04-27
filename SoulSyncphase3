@@ -1,0 +1,209 @@
+import json
+import os
+import random
+from datetime import datetime
+import matplotlib.pyplot as plt
+import platform
+
+# ---- Function to clear the screen ----
+def clear_screen():
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+5
+# ---- Function to get a time-based greeting ----
+def get_greeting():
+    hour = datetime.now().hour
+    if 5 <= hour < 12:
+        return "Good morning"
+    elif 12 <= hour < 17:
+        return "Good afternoon"
+    elif 17 <= hour < 21:
+        return "Good evening"
+    else:
+        return "Good night"
+
+# ---- Function to check for critical distress ----
+def check_for_self_harm(mood_input):
+    keywords = ["hurt myself", "kill myself", "end my life", "suicidal", "die"]
+    for keyword in keywords:
+        if keyword in mood_input.lower():
+            print("\n⚠️ It sounds like you're going through a tough time. Please reach out for immediate support.")
+            immediate_support()
+            return True
+    return False
+
+# ---- Function to immediately offer crisis support ----
+def immediate_support():
+    response = input("Would you like us to call the crisis hotline for you? (yes/no): ").strip().lower()
+    if response == "yes":
+        print("\nCalling Crisis Hotline...")
+        print("\nPlease call or text 988 immediately (National Suicide & Crisis Lifeline). Help is available 24/7.")
+    else:
+        print("\nPlease reach out when you are ready. You are not alone. Call or text 988 anytime.")
+
+# ---- Function to log mood ----
+def run_phase1(mood_input):
+    mood = mood_input
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    entry = {"timestamp": timestamp, "mood": mood}
+    
+    if os.path.exists("mood_history.json"):
+        with open("mood_history.json", "r") as file:
+            data = json.load(file)
+    else:
+        data = []
+
+    data.append(entry)
+
+    with open("mood_history.json", "w") as file:
+        json.dump(data, file, indent=4)
+
+    return "Mood logged successfully!"
+
+# ---- Function to show mood history ----
+def show_mood_graph():
+    if not os.path.exists("mood_history.json"):
+        return "No mood history found. Please log some moods first."
+
+    with open("mood_history.json", "r") as file:
+        data = json.load(file)
+
+    dates = [entry["timestamp"] for entry in data]
+    moods = [entry["mood"] for entry in data]
+
+    plt.figure(figsize=(10,5))
+    plt.plot(dates, moods, marker='o')
+    plt.xticks(rotation=45)
+    plt.title("Mood Over Time")
+    plt.xlabel("Date")
+    plt.ylabel("Mood")
+    plt.tight_layout()
+    plt.show()
+
+    return "Mood graph displayed."
+
+# ---- Function to provide AI suggestions ----
+def run_phase2(mood_input):
+    mood = mood_input.lower()
+    suggestions = {
+        "happy": ["Keep smiling! How about sharing your happiness with a friend?", "Celebrate your good mood by treating yourself!"],
+        "sad": ["Try some deep breathing exercises.", "Maybe a walk outside could help uplift your mood."],
+        "angry": ["Pause and take some deep breaths.", "Write down your feelings to release tension."],
+        "anxious": ["Try a short meditation session.", "List three things you are grateful for."],
+        "tired": ["Take a short nap if possible.", "Hydrate and stretch your body."]
+    }
+
+    if mood in suggestions:
+        return "Suggestion: " + random.choice(suggestions[mood])
+    else:
+        return "Suggestion: Try journaling your feelings or reaching out to a friend."
+
+# ---- Function to view mood statistics ----
+def view_mood_statistics():
+    if not os.path.exists("mood_history.json"):
+        return "No mood history found. Please log some moods first."
+
+    with open("mood_history.json", "r") as file:
+        data = json.load(file)
+
+    mood_counts = {}
+    for entry in data:
+        mood = entry["mood"].lower()
+        mood_counts[mood] = mood_counts.get(mood, 0) + 1
+
+    stats = "Mood Statistics:\n"
+    for mood, count in mood_counts.items():
+        stats += f"- {mood.capitalize()}: {count} times\n"
+    return stats
+
+# ---- Function to export mood history ----
+def export_mood_history():
+    if not os.path.exists("mood_history.json"):
+        return "No mood history found to export."
+
+    with open("mood_history.json", "r") as file:
+        data = json.load(file)
+
+    export_filename = f"mood_history_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+    with open(export_filename, "w") as export_file:
+        for entry in data:
+            export_file.write(f"{entry['timestamp']} - {entry['mood']}\n")
+
+    return f"Mood history exported successfully to {export_filename}."
+
+# ---- Function to offer crisis support ----
+def offer_crisis_support():
+    response = input("Would you like to talk to someone? (yes/no): ").strip().lower()
+    if response == "yes":
+        location = input("Please enter your country (e.g., United States, United Kingdom, Canada, Australia, India, South Africa, Germany, France, New Zealand): ").strip().lower()
+        hotlines = {
+            "united states": "Call or text 988 (National Suicide & Crisis Lifeline)",
+            "united kingdom": "Call 116 123 (Samaritans)",
+            "canada": "Call 1-833-456-4566 (Talk Suicide Canada)",
+            "australia": "Call 13 11 14 (Lifeline Australia)",
+            "india": "Call iCall +91 9152987821",
+            "south africa": "Call 0800 567 567 (SADAG)",
+            "germany": "Call 0800 111 0 111 (Telefonseelsorge)",
+            "france": "Call 01 45 39 40 00 (SOS Suicide)",
+            "new zealand": "Call 0800 543 354 (Lifeline NZ)"
+        }
+        if location in hotlines:
+            print(f"\n{location.title()} Crisis Hotline: {hotlines[location]}")
+        else:
+            print("\nDefault Crisis Line (US): Call or text 988 (National Suicide & Crisis Lifeline)")
+        print("You are not alone. Someone is ready to listen.")
+
+# ---- Main program ----
+if __name__ == "__main__":
+    try:
+        while True:
+            clear_screen()
+            display_logo()
+            greeting = get_greeting()
+            print(f"\n{greeting}, welcome to SoulSync!")
+            print("==============================")
+            print("1. Log Mood")
+            print("2. View Mood History")
+            print("3. Get AI Suggestions")
+            print("4. View Mood Statistics")
+            print("5. Export Mood History")
+            print("6. Exit")
+            print("==============================")
+
+            choice = input("Enter your choice: ").strip()
+
+            if choice == "1":
+                mood_input = input("How are you feeling today? ").strip()
+                if check_for_self_harm(mood_input):
+                    input("\nPress Enter to continue...")
+                    continue
+                print(run_phase1(mood_input))
+                offer_crisis_support()
+                input("\nPress Enter to continue...")
+            elif choice == "2":
+                print(show_mood_graph())
+                input("\nPress Enter to continue...")
+            elif choice == "3":
+                mood_input = input("Enter your current mood for suggestions: ").strip()
+                if check_for_self_harm(mood_input):
+                    input("\nPress Enter to continue...")
+                    continue
+                print(run_phase2(mood_input))
+                offer_crisis_support()
+                input("\nPress Enter to continue...")
+            elif choice == "4":
+                print(view_mood_statistics())
+                input("\nPress Enter to continue...")
+            elif choice == "5":
+                print(export_mood_history())
+                input("\nPress Enter to continue...")
+            elif choice == "6":
+                print("Goodbye!")
+                break
+            else:
+                print("Invalid choice. Please select 1, 2, 3, 4, 5, or 6.")
+                input("\nPress Enter to continue...")
+    except (EOFError, OSError):
+        print("\nInteractive input not available. Program exiting.")
