@@ -20,13 +20,13 @@ Completed phase 1 now working on phase 2
 
 ## 🌟 **Phase 2: Enhancements and Interactivity**
 ### Goal: Enhance user experience and introduce additional functionality.
-- [ ] **Community Support Integration**
+- [x] **Community Support Integration**
   - Add options for users to connect with mental health communities and professionals.
   - Implement secure messaging or referral features for professional resources.
-- [ ] **Advanced Data Visualization**
+- [x] **Advanced Data Visualization**
   - Improve the graphs and insights with interactive filters (e.g., mood by time of day or week).
   - Add trend prediction using machine learning.
-- [ ] **Expanded AI Capabilities**
+- [x] **Expanded AI Capabilities**
   - Train machine learning models to provide more personalized recommendations.
   - Incorporate feedback mechanisms to improve the AI's suggestions over time.
 Finally got the visual graphs and data to run, the code had issues running because I intially added a logo in the code.  I took the logo out and ran the code again and it worked.
